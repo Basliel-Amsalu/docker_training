@@ -1,18 +1,11 @@
-import os
 from observer import Observer
 
 class LoggingService(Observer):
-    def update(self, event_type, data):
-        log_message = ""
-        if event_type == "OrderPlaced":
-            log_message = f"OrderPlaced event: {data}"
-        elif event_type == "OrderShipped":
-            log_message = f"OrderShipped event: {data}"
-
-        self.log_event(log_message)
-
-    def log_event(self, log_message):
-        os.makedirs("output", exist_ok=True)
-        with open("output/events.log", "a") as file:
-            file.write(log_message + "\n")
-        print(f"LoggingService: {log_message}")
+    def __init__(self, log_file: str = 'stock_prices.log'):
+        self.log_file = log_file
+    
+    def update(self, stock: str, price: float):
+        message = f"LoggingService: Stock {stock} price updated to {price}\n"
+        print(message)
+        with open(self.log_file, 'a') as file:
+            file.write(message)
